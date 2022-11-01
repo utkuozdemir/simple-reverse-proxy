@@ -1,9 +1,11 @@
 global
   maxconn 4096
+  log stdout format raw daemon debug
 
 defaults
   mode http
   option forwardfor
+  log global
 
   timeout connect 5s
   timeout queue 5s
@@ -20,5 +22,5 @@ frontend http-in
   use_backend remote if is_websocket
 
 backend remote
-  reqadd X-Forwarded-Proto:\ https
+  http-request add-header X-Forwarded-Proto https
   server remoteserv ${UPSTREAM}

@@ -5,8 +5,13 @@ ADD init.sh /init.sh
 
 EXPOSE 80
 
-RUN apk add --no-cache gettext tini \
+USER root
+
+RUN apk add --no-cache gettext tini sudo \
+ && chmod -R 777 /usr/local/etc/haproxy/ \
  && chmod +x /init.sh
 
-ENTRYPOINT ["/usr/bin/tini", "--"]
+USER haproxy
+
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/init.sh"]
